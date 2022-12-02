@@ -13,6 +13,8 @@ def find_calories_in_top_three_elves(p: str) -> int:
     sums = sorted(sum_calories(inventory), reverse=True)
     return sum(sums[:3])
 
+
+# TODO: make this functional
 def parse_input(path: str) -> list[list[int]]:
     with Path(path).open("r") as f:
         elves = []
