@@ -20,13 +20,20 @@ class TestParseInput(unittest.TestCase):
 
 class TestScore(unittest.TestCase):
     def test_round(self):
-        self.assertEqual(score_round("A", "Y"), 8)
-        self.assertEqual(score_round("B", "X"), 1)
-        self.assertEqual(score_round("C", "Z"), 6)
+        self.assertEqual(score_action("A", "Y"), 8)
+        self.assertEqual(score_action("B", "X"), 1)
+        self.assertEqual(score_action("C", "Z"), 6)
 
 class TestSolutions(unittest.TestCase):
     def test_sample(self):
-        self.assertEqual(score_game(sample_input), 15)
+        self.assertEqual(score_game_with_action(sample_input), 15)
 
     def test_input(self):
-        self.assertEqual(score_game(input), 13268)
+        self.assertEqual(score_game_with_action(input), 13268)
+
+class TestSolutions2(unittest.TestCase):
+    def test_sample(self):
+        self.assertEqual(score_game_with_outcome(sample_input), 12)
+
+    def test_input(self):
+        self.assertEqual(score_game_with_outcome(input), 15508)
