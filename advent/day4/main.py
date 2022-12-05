@@ -16,7 +16,7 @@ def overlap(r1: range, r2: range) -> bool:
 
 def num_pairs(p: str, filter: Callable[[range, range], bool] = lambda *p: True) -> int:
     pairs = parse_input(p)
-    return sum(1 for p in pairs if filter(*p))
+    return len([p for p in pairs if filter(*p)])
 
 def num_supersets(p: str) -> int:
     return num_pairs(p, fully_contains)
