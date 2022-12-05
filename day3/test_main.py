@@ -12,7 +12,12 @@ class TestParseInput(unittest.TestCase):
             parse_input(sample_input)
         )
 
-class ItemPriority(unittest.TestCase):
+    def test_parses_input_group(self):
+        self.assertIn(
+            ["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg"],
+            parse_input_group(sample_input)
+        )
+class TestItemPriority(unittest.TestCase):
     def test_is_capitalized(self):
         self.assertTrue(is_capitalized("A"))
         self.assertFalse(is_capitalized("a"))
@@ -22,17 +27,32 @@ class ItemPriority(unittest.TestCase):
         self.assertEqual(get_priority('z'), 26)
         self.assertEqual(get_priority('A'), 27)
         self.assertEqual(get_priority('Z'), 52)
-        
 
-# class TestScore(unittest.TestCase):
-#     def test_round(self):
-#         self.assertEqual(score_action("A", "Y"), 8)
-#         self.assertEqual(score_action("B", "X"), 1)
-#         self.assertEqual(score_action("C", "Z"), 6)
+class TestCompartment(unittest.TestCase):
+    def test_split_compartment(self):
+        self.assertEqual(split_rucksack('AB'), ('A', 'B'))
+        self.assertEqual(split_rucksack('XXXXYYYY'), ('XXXX', 'YYYY'))
 
-# class TestSolutions(unittest.TestCase):
-#     def test_sample(self):
-#         self.assertEqual(score_game_with_action(sample_input), 15)
+    def test_common_type(self):
+        self.assertEqual(common_type('AA'), 'A')
+        self.assertEqual(common_type('ABCCDE'), 'C')
 
-#     def test_input(self):
-#         self.assertEqual(score_game_with_action(input), 13268)
+    def test_common_type_group(self):
+        self.assertEqual(common_type_group(('Aab', 'cAd', 'efA')), 'A')
+
+    def test_priority(self):
+        self.assertEqual(find_comp_priority('ABCCDE'), 29)
+
+class TestSolutions(unittest.TestCase):
+    def test_sample(self):
+        self.assertEqual(sum_compartment_priority(sample_input), 157)
+
+    def test_input(self):
+        self.assertEqual(sum_compartment_priority(input), 8176)
+
+class TestSolutions2(unittest.TestCase):
+    def test_sample(self):
+        self.assertEqual(sum_compartment_priority_group(sample_input), 70)
+
+    def test_input(self):
+        self.assertEqual(sum_compartment_priority_group(input), 2689)
