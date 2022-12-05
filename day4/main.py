@@ -1,5 +1,6 @@
 from pathlib import Path
 from dataclasses import dataclass
+from typing import Callable
 
 def parse_input(path: str) -> list[tuple[range, range]]:
     raw_pairs = Path(path).read_text().splitlines()
@@ -10,8 +11,16 @@ def parse_input(path: str) -> list[tuple[range, range]]:
 def fully_contains(r1: range, r2: range) -> bool:
     return set(r1).issuperset(set(r2)) or set(r2).issuperset(set(r1))
 
-def num_supersets(p: str) -> int:
-    pairs = parse_input(p)
+def overlap(r1: range, r2: range) -> bool:
+    return set(r1).intersection(set(r2)) or set(r2).intersection(set(r1))
 
-    return sum(1 for p in pairs if fully_contains(*p))
+def num_pairs(p: str, filter: Callable[[range, range], bool] = lambda *p: True) -> int:
+    pairs = parse_input(p)
+    return sum(1 for p in pairs if filter(*p))
+
+def num_supersets(p: str) -> int:
+    return num_pairs(p, fully_contains)
+
+def num_intersections(p: str) -> int:
+    return num_pairs(p, overlap)
 
