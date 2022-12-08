@@ -36,7 +36,7 @@ class TestCrateOperations(unittest.TestCase):
         self.assertEqual(top(['Z', 'N', 'D']), 'Z')
 
     def test_remove(self):
-        self.assertEqual(remove(['A', 'B']), ['B'])
+        self.assertEqual(remove(['A', 'B'], 1), ['B'])
 
     def test_add(self):
         self.assertEqual(add(['B'], 'A'), ['A', 'B'])
