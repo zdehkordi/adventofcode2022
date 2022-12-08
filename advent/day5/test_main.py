@@ -58,4 +58,4 @@ class TestSolutions2(unittest.TestCase):
         self.assertEqual(solve2(sample_input), 'MCD')
 
     def test_input(self):
-        self.assertEqual(solve2(input), 933)
+        self.assertEqual(solve2(input), 'HZFZCCWWV')
