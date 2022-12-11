@@ -1,58 +1,65 @@
 import unittest
 import os
-
 from .main import *
 
 sample_input = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs/sample-input")
 input =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs/input")
 
-class TestParseInput(unittest.TestCase):
-    def test_parse_input(self):
-        directories = parse.directories(sample_input)
-        for d in ['a', 'e', 'd']: self.assertIn(d, directories) 
+class TestBuildingDirectories(unittest.TestCase):
+    def test_moves_to_root(self):
+        self.assertEqual([["/"], {}], exec_command([], {}, "$ cd /"))
 
-class TestFS(unittest.TestCase):
-    def test_file(self):
-        f = fs.parse("8033020 d.log")
-        self.assertEqual(f.name, "d.log")
-        self.assertEqual(f.size, 8033020)
-        self.assertTrue(isinstance(f ,file))
+    def test_moves_down_dir(self):
+        self.assertEqual([["/", "d"], {}], exec_command(["/"], {}, "$ cd d"))
 
-    def test_dir(self):
-        d = fs.parse("dir e")
-        self.assertEqual(d.name, "e")
-        self.assertTrue(isinstance(d, dir))
+    def test_moves_up_dir(self):
+        self.assertEqual([["/"], {}], exec_command(["/", "d"], {}, "$ cd .."))
 
-class TestLS(unittest.TestCase):
-    def test_ls_one(self):
+    def test_adds_dir(self):
+        self.assertEqual([["/"], {"/": {}, "/a": {}}], exec_command(["/"], {"/": {}}, "dir a"))
+
+    def test_adds_file(self):
+        self.assertEqual([["/"], {"/": {"f": 99}}], exec_command(["/"], {"/": {}}, "99 f"))
+
+    def test_ignore_ls(self):
+        self.assertEqual([["/"], {}], exec_command(["/"], {}, "$ ls"))
+
+    def test_builds_test_directory(self):
         self.assertEqual(
-            ls(parse.input(sample_input), 'e'),
-            ["584 i"]
+            {"/": {"b.txt": 14848514, "c.dat": 8504156} , "/a": {"f": 29116, "g": 2557, "h.lst": 62596}, "/a/e": {"i": 584}, "/d": {"j": 4060174, "d.log": 8033020, "d.ext": 5626152, "k": 7214296}},
+            exec_command_file(sample_input)
         )
 
-class TestSize(unittest.TestCase):
-    def test_one_file(self):
+    def test_total_size(self):
         self.assertEqual(
-            size(parse.input(sample_input), 'e'), 584
+            584,
+            size(sample_input, "/a/e")
         )
 
-    def test_many_file(self):
         self.assertEqual(
-            size(parse.input(sample_input), 'd'), 24933642
+            94853,
+            size(sample_input, "/a")
         )
 
-    def test_deep(self):
         self.assertEqual(
-            size(parse.input(sample_input), 'a'), 94853
+            24933642,
+            size(sample_input, "/d")
+        )
+
+        self.assertEqual(
+            48381165,
+            size(sample_input, "/")
         )
 
 class TestSolve(unittest.TestCase):
     def test_solve_sample(self):
         self.assertEqual(
-            solve(sample_input), 95437
+            95437,
+            solve(sample_input)
         )
 
-    def test_solve(self):
+    def test_solve_input(self):
         self.assertEqual(
-            solve(input), 95437
+            919137,
+            solve(input)
         )

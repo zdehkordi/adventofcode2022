@@ -1,54 +1,50 @@
 from __future__ import annotations
+from functools import reduce
 
+import os
 from pathlib import Path
-import sys
-from dataclasses import dataclass
+import re
+from itertools import accumulate
 
-sys.setrecursionlimit(30000)
+def exec_command(path: list[str], directories: dict, cmd: str) -> list[str, dict]:
+    if cmd == "$ cd /":
+        return [["/"], directories]
+    if cmd == "$ cd ..":
+        return [path[:-1], directories]
+    if cmd == "$ ls":
+        return [path, directories]
+    if re.match(r"\$ cd (.+)$", cmd):
+        return [[*path, re.match(r"\$ cd (.+)$", cmd)[1]], directories]
+    if re.match(r"dir (.+)$", cmd):
+        new_dir = re.match(r"dir (.+)$", cmd)[1]
+        return [path, {**directories, os.path.join(os.path.join(*path), new_dir): {}}]
+    if re.match(r"(\d+) (.+)$", cmd):
+        m = re.match(r"(\d+) (.+)$", cmd)
+        p = os.path.join(*path)
+        return [path, {**directories, p: {**directories[p], m[2]: int(m[1])}}]
+    else:
+        raise Exception("cmd not found")
 
-class parse:
-    @staticmethod
-    def input(p: str):
-        return Path(p).read_text()
+def exec_command_file(p: str) -> dict:
+    cmds = Path(p).read_text().splitlines()
 
-    @staticmethod
-    def directories(p: str):
-        return [d[4:] for d in Path(p).read_text().splitlines() if d.startswith('dir')]
+    def help(path, directories, cmds):
+        if not cmds:
+            return [path, directories]
+        else:
+            return help(*exec_command(path, directories, cmds[0]), cmds[1:])
 
-@dataclass(frozen=True)
-class file:
-    name: str
-    size: int
+    return help([], {"/": {}}, cmds)[1]
 
-    def get_size(self, input: str) -> int:
-        return self.size
+def size(p: str, dir: str) -> int:
+    directories = exec_command_file(p)
 
-@dataclass(frozen=True)
-class dir:
-    name: str
+    dir_sums = [sum(v.values()) for k, v in directories.items() if str(k).startswith(dir)]
 
-    def get_size(self, input: str) -> int:
-        return size(input, self.name)
-
-class fs:
-    @classmethod
-    def parse(cls, console: str) -> file | dir:
-        split = console.split(" ")
-        if split[0] == "dir":
-            return dir(split[1])
-        else: 
-            return file(split[1], int(split[0]))
-
-def ls(input: str, dir: str) -> list[str]:
-    return input.split(f"$ cd {dir}\n$ ls\n")[1].split("\n$")[0].split("\n")
-
-def size(input: str, dir: str) -> int:
-    objects = ls(input, dir)
-    return sum(fs.parse(o).get_size(input) for o in objects)
+    return sum(dir_sums)
 
 def solve(p: str) -> int:
-    input = parse.input(p)
-    dirs = parse.directories(p)
-    dir_sizes = [size(input, d) for d in dirs]
-    big_dir_sizes = filter(lambda x: x <= 100000, dir_sizes)
-    return sum(big_dir_sizes)
+    directories = exec_command_file(p).keys()
+
+    return sum(filter(lambda x: x <= 100000, [size(p, d) for d in directories]))
+
