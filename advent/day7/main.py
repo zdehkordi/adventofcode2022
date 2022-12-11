@@ -48,3 +48,15 @@ def solve(p: str) -> int:
 
     return sum(filter(lambda x: x <= 100000, [size(p, d) for d in directories]))
 
+def solve2(p: str, fs_size: int, needed: int) -> int:
+    directories = exec_command_file(p)
+
+    used_space = size(p, "/")
+    unused_space = fs_size - used_space
+
+    to_delete = needed - unused_space
+
+    options = filter(lambda x: x >= to_delete, [size(p, d) for d in directories])
+
+    return sorted(options)[0]
+

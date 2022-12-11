@@ -63,3 +63,16 @@ class TestSolve(unittest.TestCase):
             919137,
             solve(input)
         )
+
+class TestSolve2(unittest.TestCase):
+    def test_solve_sample(self):
+        self.assertEqual(
+            24933642,
+            solve2(sample_input, 70000000, 30000000)
+        )
+
+    def test_solve_input(self):
+        self.assertEqual(
+            2877389,
+            solve2(input, 70000000, 30000000)
+        )
