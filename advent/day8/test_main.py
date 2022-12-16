@@ -35,4 +35,4 @@ def test_solve_sample():
     assert solve(sample_inp) == 21
 
 def test_solve():
-    assert solve(inp) == int()
+    assert solve(inp) == 1812
