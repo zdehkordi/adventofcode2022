@@ -1,11 +1,13 @@
 from unittest import TestCase
 
 from pathlib import Path
-from os.path import join, dirname,realpath
-from .main import *
 
-sample_input = join(dirname(realpath(__file__)), "inputs/sample-input")
-input =  join(dirname(realpath(__file__)), "inputs/input")
+from advent.day01 import *
+
+day = "01"
+
+sample_input = f"inputs/day{day}/sample-input"
+input = f"inputs/day{day}/input"
      
 class TestFindElf(TestCase):
     def test_sum_calories(self):
