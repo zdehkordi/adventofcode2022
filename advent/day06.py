@@ -1,6 +1,8 @@
 from pathlib import Path
 import sys
 
+sys.setrecursionlimit(5000)
+
 class parse:
     @staticmethod
     def input(p: str):

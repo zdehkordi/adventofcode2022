@@ -1,12 +1,12 @@
 import unittest
 import os
 
-from .main import *
+from advent.day03 import *
 
-sample_input = os.path.join(os.path.dirname(os.path.realpath(__file__))
-, "inputs/sample-input")
-input =  os.path.join(os.path.dirname(os.path.realpath(__file__))
-, "inputs/input")
+day = "03"
+
+sample_input = f"inputs/day{day}/sample-input"
+input = f"inputs/day{day}/input"
      
 class TestParseInput(unittest.TestCase):
     def test_parses_input(self):

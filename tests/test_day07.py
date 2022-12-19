@@ -1,9 +1,11 @@
 import unittest
 import os
-from .main import *
+from advent.day07 import *
 
-sample_input = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs/sample-input")
-input =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs/input")
+day = "07"
+
+sample_input = f"inputs/day{day}/sample-input"
+input = f"inputs/day{day}/input"
 
 class TestBuildingDirectories(unittest.TestCase):
     def test_moves_to_root(self):

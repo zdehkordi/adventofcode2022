@@ -1,8 +1,10 @@
 from os.path import join, dirname, realpath
-from .main import *
+from advent.day08 import *
 
-sample_inp = join(dirname(realpath(__file__)), "inputs/sample-input")
-inp =  join(dirname(realpath(__file__)), "inputs/input")
+day = "08"
+
+sample_input = f"inputs/day{day}/sample-input"
+input = f"inputs/day{day}/input"
 
 def test_is_visible():
     assert is_visible(5, Neighbors(0,2,5,5)) is True
@@ -32,7 +34,7 @@ def test_neighbors_big():
     assert get_neighbors(m, Coordinate(2, 1)) == Neighbors(3,9,5,6)
 
 def test_solve_sample():
-    assert solve(sample_inp) == 21
+    assert solve(sample_input) == 21
 
 def test_solve():
-    assert solve(inp) == 1812
+    assert solve(input) == 1812

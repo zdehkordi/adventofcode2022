@@ -6,6 +6,10 @@ from pathlib import Path
 import re
 from itertools import accumulate
 
+import sys
+
+sys.setrecursionlimit(5000)
+
 def exec_command(path: list[str], directories: dict, cmd: str) -> list[str, dict]:
     if cmd == "$ cd /":
         return [["/"], directories]
